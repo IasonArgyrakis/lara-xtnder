@@ -7,7 +7,6 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
-use Psy\Readline\Hoa\Console;
 
 class Base extends Command
 {
@@ -41,7 +40,7 @@ class Base extends Command
     {
 
         $files = Storage::files("../stubs");
-        echo $files;
+        echo json_encode($files);
     }
 
 
