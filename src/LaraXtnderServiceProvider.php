@@ -40,7 +40,8 @@ class LaraXtnderServiceProvider extends ServiceProvider
             ], 'lang');*/
 
             // Registering package commands.
-            // $this->commands([]);
+            $this->registerConsoleCommands();
+
         }
     }
 
@@ -56,5 +57,18 @@ class LaraXtnderServiceProvider extends ServiceProvider
         $this->app->singleton('lara-xtnder', function () {
             return new LaraXtnder;
         });
+    }
+
+    public function registerConsoleCommands(){
+        $this->commands([
+            Commands\ExtendApiRoutesCommand::class,
+            Commands\ExtendedBase::class,
+            Commands\ExtendFactoryCommand::class,
+            Commands\ExtendMigrationCommand::class,
+            Commands\ExtendStoreModelRequestCommand::class,
+            Commands\ExtendUpdateModelRequestCommand::class,
+            Commands\ExtendWebBase::class,
+            Commands\ExtendWebRoutesCommand::class
+        ]);
     }
 }
