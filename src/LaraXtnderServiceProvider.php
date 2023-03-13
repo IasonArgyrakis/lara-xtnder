@@ -3,6 +3,7 @@
 namespace IasonArgyrakis\LaraXtnder;
 
 use Illuminate\Support\ServiceProvider;
+use MongoDB\Driver\Command;
 
 class LaraXtnderServiceProvider extends ServiceProvider
 {
@@ -61,6 +62,7 @@ class LaraXtnderServiceProvider extends ServiceProvider
 
     public function registerConsoleCommands(){
         $this->commands([
+            Commands\Base::class,
             Commands\ExtendApiRoutesCommand::class,
             Commands\ExtendedBase::class,
             Commands\ExtendFactoryCommand::class,
