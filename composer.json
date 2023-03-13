@@ -1,0 +1,54 @@
+{
+    "name": "iasonargyrakis/lara-xtnder",
+    "description": "",
+    "keywords": [
+        "iasonargyrakis",
+        "lara-xtnder"
+    ],
+    "homepage": "https://github.com/iasonargyrakis/lara-xtnder",
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Iason Argyrakis",
+            "email": "jasonargirakis@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "require": {
+        "php": "^7.4|^8.0",
+        "illuminate/support": "^8.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^6.0",
+        "phpunit/phpunit": "^9.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "IasonArgyrakis\\LaraXtnder\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "IasonArgyrakis\\LaraXtnder\\Tests\\": "tests"
+        }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html coverage"
+
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "IasonArgyrakis\\LaraXtnder\\LaraXtnderServiceProvider"
+            ],
+            "aliases": {
+                "LaraXtnder": "IasonArgyrakis\\LaraXtnder\\LaraXtnderFacade"
+            }
+        }
+    }
+}
