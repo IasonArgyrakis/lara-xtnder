@@ -50,5 +50,7 @@
                 "LaraXtnder": "IasonArgyrakis\\LaraXtnder\\LaraXtnderFacade"
             }
         }
-    }
+    },
+     "minimum-stability": "dev",
+    "prefer-stable": true
 }
