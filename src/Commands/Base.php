@@ -12,7 +12,7 @@ class Base extends Command
 {
     protected $signature = 'xtnd:make:base {model} {structure} {--api}';
 
-    protected $description = 'Add a column to a table in a migration';
+    protected $description = 'Test ';
 
     protected function buildClass($name): string
     {
