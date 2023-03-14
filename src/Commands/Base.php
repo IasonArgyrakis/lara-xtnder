@@ -61,6 +61,16 @@ class Base extends Command
             "modelNamespace" => 'App\Models',
             "class" => $this->modelname->studly()->singular(),
         ];
+        $this->names['controller'] = [
+            "file_name" => $this->modelname->studly()->singular()."Controller",
+            "modelNamespace" => ' App\Http\Controllers',
+            "class" => $this->modelname->studly()->singular()."Controller",
+            "model" => $this->modelname->studly()->singular()->lcfirst(),
+            "storeRequest" => $this->modelname->studly()->singular()."StoreRequest",
+            "updateRequest" => $this->modelname->studly()->singular()."UpdateRequest",
+            "modelVariable" => $this->modelname->studly()->singular()->lcfirst()."",
+
+        ];
 
     }
     function convertToJSON($input)

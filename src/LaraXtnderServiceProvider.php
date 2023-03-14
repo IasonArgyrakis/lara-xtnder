@@ -64,6 +64,7 @@ class LaraXtnderServiceProvider extends ServiceProvider
         $this->commands([
             Commands\All::class,
             //Commands\Base::class,
+            Commands\Controller::class,
             Commands\Migration::class,
             Commands\Model::class,
             Commands\Factory::class,
