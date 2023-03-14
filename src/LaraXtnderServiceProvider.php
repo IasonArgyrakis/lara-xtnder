@@ -62,6 +62,7 @@ class LaraXtnderServiceProvider extends ServiceProvider
 
     public function registerConsoleCommands(){
         $this->commands([
+            Commands\All::class,
             Commands\Base::class,
             Commands\Migration::class,
             Commands\Factory::class,

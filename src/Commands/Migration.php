@@ -19,6 +19,7 @@ class Migration extends Base
 
     public function handle()
     {
+        $this->info("Making Migration");
         $this->readName();
         $this->readStructure();
         $this->generateCreateTableMigration();
@@ -29,17 +30,17 @@ class Migration extends Base
     {
         $this->templates[$this->file_type]['file_content'] = file_get_contents(__DIR__."/../stubs/migration.create.stub");
         $this->templates[$this->file_type]['file_name'] = date("Y_m_d_His")."_create_".$this->names[$this->file_type]['file_name'].".php";
-        $this->fillCreateTableMigration();
-        $this->saveCreateTableMigration();
+        $this->makeCreateTableMigration();
     }
 
 
-    private function fillCreateTableMigration()
+    private function makeCreateTableMigration()
     {
         $template = $this->templates[$this->file_type]['file_content'];
         $template = $this->replacePlaceholder($template, "table", $this->names[$this->file_type]['table_name']);
         $template = $this->replacePlaceholder($template, "model_attributes", $this->migrationPropertyList());
         $this->templates[$this->file_type]['file_content'] = $template;
+        $this->saveCreateTableMigration();
     }
 
     private function saveCreateTableMigration()

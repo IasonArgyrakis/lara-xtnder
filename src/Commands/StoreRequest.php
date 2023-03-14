@@ -19,6 +19,7 @@ class StoreRequest extends Base
 
     public function handle()
     {
+        $this->info("Making Store Request");
         $this->readName();
         $this->readStructure();
         $this->generateStoreRequest();
@@ -71,7 +72,7 @@ class StoreRequest extends Base
 
 
         }
-         return $request_text;
+        return $request_text;
     }
 
     private function saveStoreRequest()
@@ -79,16 +80,18 @@ class StoreRequest extends Base
 
         $new_file_path = app_path('/Http/Requests')."/".$this->templates[$this->file_type]['file_name'];
         if (File::exists($new_file_path)) {
-            if ($this->confirm('File exists this will overwrite! Do you wish to continue?', false)) {
+
+            $this->warn("File {$this->templates[$this->file_type]['file_name']} exists");
+            if ($this->confirm("Overwrite ?", false)) {
 
                 File::put($new_file_path, $this->templates[$this->file_type]['file_content']);
             } else {
-                $new_file_path = database_path(Str::plural($this->file_type))."/".date("Y_m_d_His")."_".$this->templates[$this->file_type]['file_name'];
+                $new_file_path = app_path('/Http/Requests')."/"."_temp_".date("His")."_".$this->templates[$this->file_type]['file_name'];
                 File::put($new_file_path, $this->templates[$this->file_type]['file_content']);
                 $this->info("file saved with name $new_file_path");
 
             }
-        }else{
+        } else {
             File::put($new_file_path, $this->templates[$this->file_type]['file_content']);
         }
 
