@@ -1,10 +1,7 @@
-# Very short description of the package
+# Make laravel models factories migrations rapidly
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/iasonargyrakis/lara-xtnder.svg?style=flat-square)](https://packagist.org/packages/iasonargyrakis/lara-xtnder)
 [![Total Downloads](https://img.shields.io/packagist/dt/iasonargyrakis/lara-xtnder.svg?style=flat-square)](https://packagist.org/packages/iasonargyrakis/lara-xtnder)
-![GitHub Actions](https://github.com/iasonargyrakis/lara-xtnder/actions/workflows/main.yml/badge.svg)
-
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
 
 ## Installation
 
@@ -16,7 +13,7 @@ composer require iasonargyrakis/lara-xtnder
 
 ## Usage
 Once installed
-treat it like the make artisan command  (no flags for now)
+treat it like the make artisan command (no flags for now)
 ### Supported types
 
 - string
@@ -28,20 +25,6 @@ php artisan xtnd:make:all Book "{title:string,author_id:user,is_favorite:bool,li
 ```
 
 
-
-
-
-
-
-[//]: # (### Testing)
-
-[//]: # ()
-[//]: # (```bash)
-
-[//]: # (composer test)
-
-[//]: # (```)
-
 ### Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
@@ -49,10 +32,6 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 ## Contributing
 
 Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-### Security
-
-If you discover any security related issues, please email jasonargirakis@gmail.com instead of using the issue tracker.
 
 ## Credits
 
