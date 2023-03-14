@@ -63,9 +63,11 @@ class Base extends Command
 
     private function readStructure()
     {
-        function convertToJSON($input) {
+        function convertToJSON($input)
+        {
             $json = str_replace('{', '{"', $input);
             $json = str_replace(':', '":"', $json);
+            $json = str_replace(',', '","', $json);
             $json = str_replace('}', '"}', $json);
             return $json;
         }
@@ -74,16 +76,21 @@ class Base extends Command
 
         $structure = convertToJSON($structure);
 
-        $props=json_decode($structure,true);
-        dd($props);
-        foreach ($props as $key =>$value) {
-            $this->modelproperites[]=["name"=>$key,"type"=>$value];
+        $props = json_decode($structure, true);
+        foreach ($props as $key => $value) {
+            $is_relation = false;
+            if (Str::contains($key, "_id")) {
+                $is_relation = true;
+            }
+            $this->modelproperites[] = [
+                "is_releation" => $is_relation,
+                "name" => $key,
+                "type" => $value
+            ];
+
 
         }
     }
-
-
-
 
 
     private function getFiles()
@@ -93,23 +100,25 @@ class Base extends Command
     }
 
 
-
     private function generateCreateTableMigration()
     {
         $this->templates['migration']['file_content'] = file_get_contents(__DIR__."/../stubs/migration.create.stub");
-        $this->templates['migration']['file_name'] =  date("Y_m_d_His")."_create_".$this->names['migration']['file_name'].".php";
+        $this->templates['migration']['file_name'] = date("Y_m_d_His")."_create_".$this->names['migration']['file_name'].".php";
         $this->fillCreateTableMigration();
         $this->saveCreateTableMigration();
     }
 
 
-    private function fillCreateTableMigration(){
+    private function fillCreateTableMigration()
+    {
         $template = $this->templates['migration']['file_content'];
-        $template = $this->replacePlaceholder($template, "table",$this->names['migration']['table_name']);
+        $template = $this->replacePlaceholder($template, "table", $this->names['migration']['table_name']);
         $template = $this->replacePlaceholder($template, "model_attributes", $this->migrationPropertyList());
-        $this->templates['migration']['file_content']=$template;
+        $this->templates['migration']['file_content'] = $template;
     }
-    private function saveCreateTableMigration(){
+
+    private function saveCreateTableMigration()
+    {
         $new_file_path = database_path('migrations')."/".$this->templates['migration']['file_name'];
         File::put($new_file_path, $this->templates['migration']['file_content']);
     }
@@ -117,7 +126,7 @@ class Base extends Command
     private function generateFactory()
     {
         $template = file_get_contents(__DIR__."/../stubs/migration.create.stub");
-        $template = $this->replacePlaceholder($template, "table",$this->names['migration']['table_name']);
+        $template = $this->replacePlaceholder($template, "table", $this->names['migration']['table_name']);
         $template = $this->replacePlaceholder($template, "model_attributes", $this->migrationPropertyList());
         $file_name = date("Y_m_d_His")."_create_".$this->names['migration']['file_name'];
         $new_file_path = database_path('migrations')."/".$file_name.".php";
@@ -125,23 +134,28 @@ class Base extends Command
     }
 
 
-
-    private function migrationPropertyList(): string
+    private function migrationPropertyList()
     {
-        $migration_text='';
+        $migration_text = '';
         foreach ($this->modelproperites as $property) {
-            $migration_text .= match ($property['type']) {
-                "bool" => "\$table->boolean('{$property['name']}')",
-                "int" => "\$table->integer('{$property['name']}')",
-                default => "\$table->string('{$property['name']}')",
-            };
-            $migration_text .= ";\n";
+
+            if ($property['is_releation']) {
+                $table_name = Str::of($property['type'])->plural()->snake();
+                $migration_text .= "\$table->foreign('{$property['name']}')->references('id')->on('{$table_name}')->onUpdate('cascade')->onDelete('cascade')";
+            } else {
+                $migration_text .= match ($property['type']) {
+                    "bool" => "\$table->boolean('{$property['name']}')",
+                    "int" => "\$table->integer('{$property['name']}')",
+                    default => "\$table->string('{$property['name']}')",
+                };
+            }
+            $migration_text .= ";\r\t\t\t";
+
+
         }
 
         return $migration_text;
     }
-
-
 
 
 }
