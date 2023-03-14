@@ -13,7 +13,7 @@ class UpdateRequest extends Base
 {
     protected $signature = 'xtnd:make:update-request {modelName} {structure}';
 
-    protected $description = 'Test ';
+    protected $description = 'Genrates UpdatesRequest based on structure ';
 
     protected $file_type = "update_request";
 

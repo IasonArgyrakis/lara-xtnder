@@ -13,7 +13,7 @@ class StoreRequest extends Base
 {
     protected $signature = 'xtnd:make:store-request {modelName} {structure}';
 
-    protected $description = 'Test ';
+    protected $description = 'Genrates StoreRequest based on structure ';
 
     protected $file_type = "store_request";
 

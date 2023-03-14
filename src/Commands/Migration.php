@@ -13,7 +13,7 @@ class Migration extends Base
 {
     protected $signature = 'xtnd:make:migration {modelName} {structure}';
 
-    protected $description = 'Test ';
+    protected $description = 'Genrates migration based on structure';
 
     protected $file_type = "migration";
 

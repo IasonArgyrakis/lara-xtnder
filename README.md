@@ -15,16 +15,32 @@ composer require iasonargyrakis/lara-xtnder
 ```
 
 ## Usage
+Once installed
+treat it like the make artisan command  (no flags for now)
+### Supported types
 
+- string
+- bool
+- int
+- relation (derived via "_id" )
 ```php
-// Usage description here
+php artisan xtnd:make:all Book "{title:string,author_id:user,is_favorite:bool,likes:int}"
 ```
 
-### Testing
 
-```bash
-composer test
-```
+
+
+
+
+
+[//]: # (### Testing)
+
+[//]: # ()
+[//]: # (```bash)
+
+[//]: # (composer test)
+
+[//]: # (```)
 
 ### Changelog
 

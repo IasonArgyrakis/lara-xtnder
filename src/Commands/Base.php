@@ -34,7 +34,7 @@ class Base extends Command
 
     protected function readName()
     {
-   
+
         $this->modelname = Str::of($this->argument('modelName'));
         $this->names['migration'] = [
             "file_name" => $this->modelname->snake()->plural(),
@@ -58,7 +58,8 @@ class Base extends Command
         ];
         $this->names['model'] = [
             "file_name" => $this->modelname->studly()->singular(),
-            "class_name" => $this->modelname->studly()->singular(),
+            "modelNamespace" => 'App\Models',
+            "class" => $this->modelname->studly()->singular(),
         ];
 
     }
@@ -73,7 +74,7 @@ class Base extends Command
 
     protected function readStructure()
     {
-   
+
 
         $structure = $this->argument('structure');
 
@@ -96,7 +97,7 @@ class Base extends Command
     }
 
 
-  
+
 
 
 

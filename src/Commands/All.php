@@ -15,7 +15,7 @@ class All extends Command
 {
     protected $signature = 'xtnd:make:all {modelName} {structure} ';
 
-    protected $description = 'Test ';
+    protected $description = 'Genrates migration,model,factory,store-request,update-request, ';
 
 
     public function handle()
@@ -26,6 +26,7 @@ class All extends Command
         $commands =
             [
                 "migration",
+                "model",
                 "factory",
                 "store-request",
                 "update-request",

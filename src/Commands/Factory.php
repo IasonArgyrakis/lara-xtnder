@@ -13,7 +13,9 @@ class Factory extends Base
 {
     protected $signature = 'xtnd:make:factory {modelName} {structure}';
 
-    protected $description = 'Test ';
+    protected $description = 'Genrates factory based on structure';
+
+
 
     protected $file_type = "factory";
 
