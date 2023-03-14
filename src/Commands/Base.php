@@ -19,6 +19,8 @@ class Base extends Command
      * @var \Symfony\Component\Finder\SplFileInfo[]
      */
     private array $files;
+    private array $templates;
+    private array $modelproperites;
 
     protected function buildClass($name): string
     {
@@ -39,16 +41,15 @@ class Base extends Command
 
     public function handle()
     {
-        $this->makeNames();
-        $this->makePropeties();
-        $this->getFiles();
-        $this->generateCreateMigration();
+        $this->readName();
+        $this->readStructure();
+        //$this->getFiles();
+        $this->generateCreateTableMigration();
     }
 
-    private function makeNames()
+    private function readName()
     {
-        $modelName = $this->argument('modelName');
-        $this->modelname = Str::of($modelName);
+        $this->modelname = Str::of($this->argument('modelName'));
         $this->names['migration'] = [
             "file_name" => $this->modelname->snake()->plural(),
             "table_name" => $this->modelname->snake()->plural(),
@@ -58,26 +59,32 @@ class Base extends Command
             "class_name" => $this->modelname->studly()->singular(),
         ];
 
-
     }
 
-    private function makePropeties()
+    private function readStructure()
     {
-        $structure = $this->argument('structure');
-        $props =explode(" ",$structure);
-
-        $this->modelproperites=[];
-        foreach ($props as $prop) {
-            $prop =explode(":",$prop);
-            $this->modelproperites[]=["name"=>Arr::get($prop,0,""),"type"=>Arr::get($prop,1,"string")];
-
+        function convertToJSON($input) {
+            $json = str_replace('{', '{"', $input);
+            $json = str_replace(':', '":"', $json);
+            $json = str_replace('}', '"}', $json);
+            return $json;
         }
 
+        $structure = $this->argument('structure');
 
+        $structure = convertToJSON($structure);
 
+        $props=json_decode($structure,true);
+        dd($props);
+        foreach ($props as $key =>$value) {
+            $this->modelproperites[]=["name"=>$key,"type"=>$value];
 
-
+        }
     }
+
+
+
+
 
     private function getFiles()
     {
@@ -87,25 +94,54 @@ class Base extends Command
 
 
 
-    private function generateCreateMigration()
+    private function generateCreateTableMigration()
     {
-        $template = file_get_contents(__DIR__."/../stubs/migration.create.stub");
+        $this->templates['migration']['file_content'] = file_get_contents(__DIR__."/../stubs/migration.create.stub");
+        $this->templates['migration']['file_name'] =  date("Y_m_d_His")."_create_".$this->names['migration']['file_name'].".php";
+        $this->fillCreateTableMigration();
+        $this->saveCreateTableMigration();
+    }
+
+
+    private function fillCreateTableMigration(){
+        $template = $this->templates['migration']['file_content'];
         $template = $this->replacePlaceholder($template, "table",$this->names['migration']['table_name']);
-        $template = $this->replacePlaceholder($template, "model_attributes", "ok");
-        $file_name = date("Y_m_d_His")."_create_".$this->names['migration']['file_name'];
-        $new_file_path = database_path('migrations')."/".$file_name.".php";
-        File::put($new_file_path, $template);
+        $template = $this->replacePlaceholder($template, "model_attributes", $this->migrationPropertyList());
+        $this->templates['migration']['file_content']=$template;
+    }
+    private function saveCreateTableMigration(){
+        $new_file_path = database_path('migrations')."/".$this->templates['migration']['file_name'];
+        File::put($new_file_path, $this->templates['migration']['file_content']);
     }
 
     private function generateFactory()
     {
         $template = file_get_contents(__DIR__."/../stubs/migration.create.stub");
         $template = $this->replacePlaceholder($template, "table",$this->names['migration']['table_name']);
-        $template = $this->replacePlaceholder($template, "model_attributes", "ok");
+        $template = $this->replacePlaceholder($template, "model_attributes", $this->migrationPropertyList());
         $file_name = date("Y_m_d_His")."_create_".$this->names['migration']['file_name'];
         $new_file_path = database_path('migrations')."/".$file_name.".php";
         File::put($new_file_path, $template);
     }
+
+
+
+    private function migrationPropertyList(): string
+    {
+        $migration_text='';
+        foreach ($this->modelproperites as $property) {
+            $migration_text .= match ($property['type']) {
+                "bool" => "\$table->boolean('{$property['name']}')",
+                "int" => "\$table->integer('{$property['name']}')",
+                default => "\$table->string('{$property['name']}')",
+            };
+            $migration_text .= ";\n";
+        }
+
+        return $migration_text;
+    }
+
+
 
 
 }
