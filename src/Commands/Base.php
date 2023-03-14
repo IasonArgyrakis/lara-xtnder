@@ -19,19 +19,8 @@ class Base extends Command
      * @var \Symfony\Component\Finder\SplFileInfo[]
      */
     private array $files;
-    private array $templates;
-    private array $modelproperites;
-
-    protected function buildClass($name): string
-    {
-        $stub = $this->files->get($this->getStub());
-
-        return $this->replaceNamespace($stub, $name)->replaceClass(
-            $this->replaceType($stub, $this->getNameInput()),
-            $name
-        );
-    }
-
+    protected array $templates;
+    protected array $modelproperites;
 
     protected function replacePlaceholder($stub_content, $param_name, $param_value): string
     {
@@ -47,12 +36,28 @@ class Base extends Command
         $this->generateCreateTableMigration();
     }
 
-    private function readName()
+    protected function readName()
     {
         $this->modelname = Str::of($this->argument('modelName'));
         $this->names['migration'] = [
             "file_name" => $this->modelname->snake()->plural(),
             "table_name" => $this->modelname->snake()->plural(),
+        ];
+        $this->names['factory'] = [
+            "file_name" => $this->modelname->studly()->singular()."Factory",
+            "factoryNamespace" => 'Database\Factories',
+            "namespacedModel" => 'App\Models\\'.$this->modelname->studly()->singular(),
+            "factory" => $this->modelname->studly()->singular(),
+        ];
+        $this->names['store_request'] = [
+            "file_name" => $this->modelname->studly()->singular()."StoreRequest",
+            "requestNamespace" => 'App\Http\Requests',
+            "class" => $this->modelname->studly()->singular()."StoreRequest",
+        ];
+        $this->names['update_request'] = [
+            "file_name" => $this->modelname->studly()->singular()."UpdateRequest",
+            "requestNamespace" => 'App\Http\Requests',
+            "class" => $this->modelname->studly()->singular()."UpdateRequest",
         ];
         $this->names['model'] = [
             "file_name" => $this->modelname->studly()->singular(),
@@ -61,7 +66,7 @@ class Base extends Command
 
     }
 
-    private function readStructure()
+    protected function readStructure()
     {
         function convertToJSON($input)
         {
