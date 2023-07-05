@@ -13,7 +13,7 @@ composer require iasonargyrakis/lara-xtnder
 
 ## Usage
 Once installed
-treat it like the make artisan command (no flags for now)
+treat it like the make artisan command (no flags for now) 
 ### Supported types
 
 - string
